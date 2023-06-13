@@ -4,6 +4,7 @@ This repository contains MATLAB code for implementing the Random Forest algorith
 
 Prerequisites
 To run the code in this repository, you need:
+
 •	MATLAB (2021 or higher)
 
 Installation
@@ -11,7 +12,7 @@ Installation
 2.	Open MATLAB and navigate to the repository folder
 
 Usage
-1.	Load the dataset (REQUIRED_DATA.mat) into MATLAB
+1.	Load the dataset (REQUIRED_DATA.mat) into MATLAB (onshore_height.mat is additional data if tsunami wave height is interested)
 2.	Open the ‘short_code.m’ file in MATLAB
 3.	Set the option for response variable (1 for tsunami height and 2 for tsunami loss), number of offshore sensors (1 for 99 sensors and 2 for 6 sensors), and waiting time
 4.	The input features are maximum wave amplitude from each offshore sensors and earthquake information, including magnitude, longitude, and latitude. The main response variable is tsunami loss.
