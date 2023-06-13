@@ -7,6 +7,7 @@ warning off
 %% Load the original data
 % Iwanuma
 load REQUIRED_DATA
+load onshore_height
 % % REQUIRED_DATA CONTAINING:
 % % 1. bldg_center: containg the longitue and latitude of interested onshore
 % % location
