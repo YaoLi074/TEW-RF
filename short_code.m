@@ -15,6 +15,7 @@ load REQUIRED_DATA
 % % 3. offshore_station: containing ID of the offshroe sensors
 % % 4. Tsunami_loss: response variable （US$）
 % % 5. wave_amplitude: containing offshore sensors recorded wave amplitude
+% % 6. onshore_height: containing onshore tsunami height
 % (m) size: 120*119*500*8. (120: waiting time duration 1-120 min; 119: 99
 % offshore sensors and 20 onshore locations; 500: number of earthquake
 % events; 8: 8 bin earthquake magnitude M7.5 to M9.1 with M0.2 increment)
@@ -25,13 +26,20 @@ load REQUIRED_DATA
 
 %% Analysis options/set-up
 
-resp_variable_type = 2 %%Choose 1 (height) or 2 (loss)
+resp_variable_type = 1 %%Choose 1 (height) or 2 (loss)
 full_model = 1 %% choose 1 (99 sensors) or 2 (6 sensors)
-max_time = [30] %% set maximum waiting time
+max_time = [5] %% set maximum waiting time
 
 %% get data
 % % get response data (Tsunami loss)
-res1 = max(Tsunami_loss(:),0.0001); %% get response data
+
+if resp_variable_type == 1 
+    res1 = onshore_height(:); %heterogeneous slip base
+elseif resp_variable_type == 2
+    res1 = max(Tsunami_loss(:),0.0001); %% get response data
+end
+
+
     
 if full_model == 1
     selected_sensors = offshore_station; %% get selected sensors
@@ -80,10 +88,25 @@ disp(['MSE of tree model2 using selected sensor with eq is  ',num2str(mse)])
 figure(30) %plot simulated data vs predicted
 plot(res1, exp(rf_esfm_prediction),'b.')
 hold on;
-x = linspace(-2,1400);y = linspace(-2,1400);plot(x,y);
-axis([0 1400 0 1400])
+if resp_variable_type == 1 
+    x = linspace(-2,20);y = linspace(-2,20);plot(x,y);
+    axis([0 20 0 20])
+elseif resp_variable_type == 2
+    x = linspace(-2,1400);y = linspace(-2,1400);plot(x,y);
+    axis([0 1400 0 1400])
+end
 axis square
- 
+
+figure(31)
+residuals = (res1-exp(rf_esfm_prediction));
+plot(exp(rf_esfm_prediction), residuals, 'o');
+if resp_variable_type == 1 
+    axis([0 20 -4 3])
+elseif resp_variable_type == 2
+    axis([0 1400 -400 700])
+end
+
+% axis square
 % only offshore sensors
 
 % fit RF model
@@ -97,9 +120,22 @@ disp(['MSE of tree model2 using using selected sensor with no eq is  ',num2str(m
 figure(40) %plot simulated data vs predicted
 plot(res1, exp(rf_sfm_prediction),'b.')
 hold on;
-x = linspace(-2,1400);y = linspace(-2,1400);plot(x,y);
-axis([0 1400 0 1400])
+if resp_variable_type == 1 
+    x = linspace(-2,20);y = linspace(-2,20);plot(x,y);
+    axis([0 20 0 20])
+elseif resp_variable_type == 2
+    x = linspace(-2,1400);y = linspace(-2,1400);plot(x,y);
+    axis([0 1400 0 1400])
+end
 axis square
- 
 
+
+figure(41)
+residuals = (res1-exp(rf_sfm_prediction));
+plot(exp(rf_sfm_prediction), residuals, 'o');
+if resp_variable_type == 1 
+    axis([0 20 -4 3])
+elseif resp_variable_type == 2
+    axis([0 1400 -400 700])
+end
  
